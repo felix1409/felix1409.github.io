@@ -3,8 +3,7 @@ body {
 }
 /* Header Background */
 #home {
-  background: url("../projectutsweb/img/bagrond.JPG") no-repeat center
-    center/cover;
+  background: url("img/bagrond.JPG") no-repeat center center/cover;
   height: 100vh;
   display: flex;
   justify-content: center;
