@@ -15,6 +15,10 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
       rel="stylesheet"
     />
+    <script
+      type="text/javascript"
+      src="https://cdn.emailjs.com/dist/email.min.js"
+    ></script>
   </head>
 
   <body>
@@ -66,7 +70,7 @@
         <h2 class="text-center">Contact Me</h2>
         <div class="row justify-content-center">
           <div class="col-md-6">
-            <form>
+            <form id="contactForm">
               <div class="mb-3">
                 <label for="name" class="form-label">Name</label>
                 <input type="text" class="form-control" id="name" required />
@@ -88,6 +92,13 @@
                 Send Message
               </button>
             </form>
+            <div
+              id="successMessage"
+              class="alert alert-success mt-3 d-none"
+              role="alert"
+            >
+              Your message has been sent successfully!
+            </div>
           </div>
         </div>
       </div>
@@ -100,5 +111,60 @@
 
     <!-- Bootstrap JS and dependencies (Popper.js) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JavaScript for form handling and validation -->
+    <script>
+      (function () {
+        emailjs.init("YOUR_USER_ID"); // Ganti dengan User ID Anda
+      })();
+
+      document
+        .getElementById("contactForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Mencegah pengiriman formulir default
+
+          // Ambil data dari form
+          const name = document.getElementById("name").value.trim();
+          const email = document.getElementById("email").value.trim();
+          const message = document.getElementById("message").value.trim();
+
+          // Validasi sederhana
+          if (name === "" || email === "" || message === "") {
+            alert("Semua kolom harus diisi.");
+            return;
+          }
+
+          if (!validateEmail(email)) {
+            alert("Masukkan email yang valid.");
+            return;
+          }
+
+          // Kirim email menggunakan EmailJS
+          emailjs
+            .send("felixfelix76918@gmail.com", "YOUR_TEMPLATE_ID", {
+              name: name,
+              email: email,
+              message: message,
+            })
+            .then(
+              function (response) {
+                console.log("SUCCESS!", response.status, response.text);
+                document
+                  .getElementById("successMessage")
+                  .classList.remove("d-none"); // Tampilkan pesan sukses
+                document.getElementById("contactForm").reset(); // Reset form
+              },
+              function (error) {
+                console.log("FAILED...", error);
+              }
+            );
+        });
+
+      // Fungsi validasi email
+      function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+      }
+    </script>
   </body>
 </html>
